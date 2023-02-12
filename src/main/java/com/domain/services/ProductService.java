@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-//Class Service digunakan untuk melakukan bisnis proses
+//Class Service digunakan untuk melakukan proses bisnis
 @Service
 @Transactional
 public class ProductService {
