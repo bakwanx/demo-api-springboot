@@ -1,6 +1,7 @@
 package com.domain.models.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.io.Serializable;
 
@@ -14,6 +15,7 @@ public class Product implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)//auto increament
     private Long id;
 
+    @NotEmpty(message = "Name is required")
     @Column(name = "product_name", length = 255)
     private String name;
 
