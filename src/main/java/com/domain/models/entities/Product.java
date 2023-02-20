@@ -4,29 +4,31 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "tbl_product")
 public class Product implements Serializable {
-
     private static final long serialVersionUID = 1L;
-
     @Id//set to primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY)//auto increament
     private Long id;
-
     @NotEmpty(message = "Name is required")
     @Column(name = "product_name", length = 255)
     private String name;
-
     @NotEmpty(message = "Description is required")
     @Column(name = "product_description", length = 500)
     private String description;
-
     private double price;
-
     @ManyToOne
     private Category category;
+    @ManyToMany
+    @JoinTable(
+        name = "tbl_product_supplier",
+        joinColumns = @JoinColumn(name = "product_id"),
+        inverseJoinColumns = @JoinColumn(name = "supplier_id")
+    )
+    private Set<Supplier> suppliers;
 
     public Product() {
     }
@@ -77,4 +79,13 @@ public class Product implements Serializable {
     public void setCategory(Category category) {
         this.category = category;
     }
+
+    public Set<Supplier> getSuppliers() {
+        return suppliers;
+    }
+
+    public void setSuppliers(Set<Supplier> suppliers) {
+        this.suppliers = suppliers;
+    }
+
 }
