@@ -19,11 +19,14 @@ public class Product implements Serializable {
     @Column(name = "product_name", length = 255)
     private String name;
 
+    @NotEmpty(message = "Description is required")
     @Column(name = "product_description", length = 500)
     private String description;
 
     private double price;
 
+    @ManyToOne
+    private Category category;
 
     public Product() {
     }
@@ -65,5 +68,13 @@ public class Product implements Serializable {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
