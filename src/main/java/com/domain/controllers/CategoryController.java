@@ -1,11 +1,9 @@
 package com.domain.controllers;
 
+import com.domain.dto.CategoryData;
 import com.domain.dto.ResponseData;
-import com.domain.dto.SupplierData;
 import com.domain.models.entities.Category;
-import com.domain.models.entities.Product;
-import com.domain.models.entities.Supplier;
-import com.domain.services.ProductService;
+import com.domain.services.CategoryService;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,19 +14,16 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/products")
-public class ProductController {
-
+@RequestMapping("/api/categories")
+public class CategoryController {
     @Autowired
-    private ProductService productService;
-
+    private CategoryService categoryService;
     @Autowired
     private ModelMapper modelMapper;
 
     @PostMapping
-    public ResponseEntity<ResponseData<Product>> create(@Valid @RequestBody Product product, Errors errors) {
-
-        ResponseData<Product> responseData = new ResponseData();
+    public ResponseEntity<ResponseData<Category>> create(@Valid @RequestBody CategoryData categoryData, Errors errors) {
+        ResponseData<Category> responseData = new ResponseData<>();
 
         if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
@@ -38,33 +33,26 @@ public class ProductController {
             responseData.setPayload(null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
         }
+        // Mapping data dengan modelMapper
+        Category category = modelMapper.map(categoryData, Category.class);
         responseData.setStatus(true);
-        responseData.setPayload(productService.save(product));
+        responseData.setPayload(categoryService.save(category));
         return ResponseEntity.ok(responseData);
-    }
-
-    @GetMapping("/filter/{name}")
-    public Iterable<Product> findByName(@PathVariable("name") String name){
-        return productService.findByName(name);
     }
 
     @GetMapping
-    public Iterable<Product> findAll() {
-        return productService.findAll();
+    public Iterable<Category> findAll(){
+        return categoryService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Product findOne(@PathVariable("id") Long id) {
-        Product product = productService.findById(id);
-        if (product == null){
-            throw new RuntimeException("Product not found");
-        }
-        return product;
+    public Category findOne(@PathVariable("id") Long id){
+        return categoryService.findOne(id);
     }
 
     @PutMapping
-    public ResponseEntity<ResponseData<Product>> update(@Valid @RequestBody Product product, Errors errors) {
-        ResponseData<Product> responseData = new ResponseData();
+    public ResponseEntity<ResponseData<Category>> update(@Valid @RequestBody CategoryData categoryData, Errors errors) {
+        ResponseData<Category> responseData = new ResponseData<>();
 
         if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
@@ -74,18 +62,11 @@ public class ProductController {
             responseData.setPayload(null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
         }
+        // Mapping data dengan modelMapper
+        Category category = modelMapper.map(categoryData, Category.class);
         responseData.setStatus(true);
-        responseData.setPayload(productService.save(product));
+        responseData.setPayload(categoryService.save(category));
         return ResponseEntity.ok(responseData);
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Long id) {
-        productService.removeOne(id);
-    }
-
-    @PostMapping("/{id}")
-    public void addSupplier(@RequestBody Supplier supplier, @PathVariable("id") Long productId){
-        productService.addSupplier(supplier, productId);
-    }
 }

@@ -3,10 +3,11 @@ package com.domain.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+//Class DTO
 public class ResponseData<T> {
-      private boolean status;
-      private List<String> messages = new ArrayList<>();
-      private T payload;
+    private boolean status;
+    private List<String> messages = new ArrayList<>();
+    private T payload;
 
     public boolean isStatus() {
         return status;

@@ -1,6 +1,7 @@
 package com.domain.services;
 
 import com.domain.models.entities.Product;
+import com.domain.models.entities.Supplier;
 import com.domain.models.repos.ProductRepo;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-//Class Service digunakan untuk melakukan proses bisnis
+//Class Service digunakan untuk melakukan proses bisnis/logic2 nya
 @Service
 @Transactional
 public class ProductService {
@@ -24,11 +25,11 @@ public class ProductService {
     }
 
     public Product findById(Long id){
-        Optional<Product> temp = productRepo.findById(id);
-        if(temp.isPresent()){
-            return null;
+        Optional<Product> byId = productRepo.findById(id);
+        if(byId.isPresent()){
+            return byId.get();
         }
-        return productRepo.findById(id).get();
+        return null;
     }
 
     //get list of data
@@ -40,8 +41,16 @@ public class ProductService {
         productRepo.deleteById(id);
     }
 
-    public List<Product> findByName(String name){
+    public Iterable<Product> findByName(String name){
         return productRepo.findByNameContains(name);
     }
 
+    public void addSupplier(Supplier supplier, Long productId){
+        Product product = findById(productId);
+        if(product == null){
+            throw new RuntimeException("Product with ID: "+productId+" not found");
+        }
+        product.getSuppliers().add(supplier);
+        save(product);
+    }
 }

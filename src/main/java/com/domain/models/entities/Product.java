@@ -1,5 +1,8 @@
 package com.domain.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 
@@ -8,6 +11,11 @@ import java.util.Set;
 
 @Entity
 @Table(name = "tbl_product")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)// menghindari infinite loop, dan menampilkan/get data json
+// melalui product service maupun supplier service
 public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id//set to primary key
@@ -28,6 +36,7 @@ public class Product implements Serializable {
         joinColumns = @JoinColumn(name = "product_id"),
         inverseJoinColumns = @JoinColumn(name = "supplier_id")
     )
+//    @JsonManagedReference //digunakan untuk menghindari infinite loop json
     private Set<Supplier> suppliers;
 
     public Product() {

@@ -1,5 +1,9 @@
 package com.domain.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -7,6 +11,11 @@ import java.util.Set;
 
 @Entity
 @Table(name = "tbl_suppliers")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)// menghindari infinite loop, dan menampilkan/get data json
+// melalui product service maupun supplier service
 public class Supplier implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,8 +27,9 @@ public class Supplier implements Serializable {
     @Column(length = 100, nullable = false, unique = true)
     private String email;
     @ManyToMany(
-        mappedBy = "suppliers"//sesuai nama variable di Product.java
+            mappedBy = "suppliers"//sesuai nama variable di Product.java
     )
+    //    @JsonBackReference //digunakan untuk menghindari infinite loop json
     private Set<Product> products;
 
     public Long getId() {
