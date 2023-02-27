@@ -68,7 +68,6 @@ public class ProductController {
     @PutMapping
     public ResponseEntity<ResponseData<Product>> update(@Valid @RequestBody Product product, Errors errors) {
         ResponseData<Product> responseData = new ResponseData();
-
         if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
                 responseData.getMessages().add(error.getDefaultMessage());
@@ -103,12 +102,12 @@ public class ProductController {
     }
 
     @GetMapping("search/category/{categoryId}")
-    public List<Product> getProductByCategory(@PathVariable("categoryId") Long categoryId){
+    public List<Product> getProductByCategory(@PathVariable("categoryId") Long categoryId) {
         return productService.findByCategory(categoryId);
     }
 
     @GetMapping("search/supplier/{supplierId}")
-    public List<Product> getProductBySupplier(@PathVariable("supplierId") Long supplierId){
+    public List<Product> getProductBySupplier(@PathVariable("supplierId") Long supplierId) {
         return productService.findBySupplier(supplierId);
     }
 
