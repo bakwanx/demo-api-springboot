@@ -112,8 +112,4 @@ public class ProductController {
         return productService.findBySupplier(supplierId);
     }
 
-    @GetMapping("coba")
-    public String getCoba(){
-        return "Hahahahaaha;";
-    }
 }
