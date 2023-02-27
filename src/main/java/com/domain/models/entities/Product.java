@@ -36,7 +36,7 @@ public class Product implements Serializable {
         joinColumns = @JoinColumn(name = "product_id"),
         inverseJoinColumns = @JoinColumn(name = "supplier_id")
     )
-//    @JsonManagedReference //digunakan untuk menghindari infinite loop json
+    //@JsonManagedReference //digunakan untuk menghindari infinite loop json
     private Set<Supplier> suppliers;
 
     public Product() {
